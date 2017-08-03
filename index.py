@@ -29,7 +29,7 @@ from datetime import datetime
 
 AccessToken = os.environ["ChannelAccessToken"]
 ChannelSecret = os.environ["ChannelSecret"]
-ChannelID = os.environ["ChannelID"]
+ChannelID = os.environ["UserID"]
 
 app = Flask(__name__)
 
