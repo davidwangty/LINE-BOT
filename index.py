@@ -11,7 +11,7 @@ from linebot.models import (
 )
 import os
 import psycopg2
-import urlparse3
+from flask.ext.sqlalchemy import SQLAlchemy
 import currency_search
 from datetime import datetime
 import pytz
@@ -19,28 +19,31 @@ import pytz
 # timezone set
 tpe = pytz.timezone('Asia/Taipei')
 
-# Database
-urlparse3.uses_netloc.append("postgres")
-url = urlparse3.urlparse(os.environ["DATABASE_URL"])
-
-conn = psycopg2.connect(
-    database=url.path[1:],
-    user=url.username,
-    password=url.password,
-    host=url.hostname,
-    port=url.port
-)
-
 AccessToken = os.environ["ChannelAccessToken"]
 ChannelSecret = os.environ["ChannelSecret"]
 ChannelID = os.environ["UserID"]
 
 app = Flask(__name__)
 
+# Database
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+db = SQLAlchemy(app)
+
+class User(db.Model):
+    user_id = db.Column(db.Integer, primary_key=True)
+    reply_token = db.Column(db.String(100), unique=True)
+
+    def __init__(self, user_id, reply_token):
+        self.user_id = user_id
+        self.reply_token = reply_token
+
+    def __repr__(self):
+        return '<ID %r>' % self.user_id
+
 line_bot_api = LineBotApi(AccessToken)
 handler = WebhookHandler(ChannelSecret)
 
-# Echo功能
+# Webhook 處理 驗證後交給hander
 @app.route("/callback", methods=['POST'])
 def callback():
     # get X-Line-Signature header value
@@ -61,6 +64,8 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handel_message(event):
+    print("userID:", event.source.user_id, event.source.type)
+    print("reply_token:", event.reply_token)
     if event.message.text == "日幣":
         yen_info = currency_search.yen()
         message = "日幣 " + datetime.strftime(datetime.now(tz=tpe), "%m/%d %H:%M")
