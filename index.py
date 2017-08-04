@@ -79,13 +79,21 @@ def handel_message(event):
             TextSendMessage(text=message))
 
     # 建立使用者資料
-    if event.message.text == "建立":
+    elif event.message.text == "建立":
         user = User(event.source.user_id, event.reply_token)
         db.session.add(user)
         db.session.commit()
         all_users = User.query.all()
         print(all_users)
 
+    # 查詢所有使用者資料 
+    elif event.message.text == "所有使用者":
+        all_users = User.query.all()
+        line_bot_api.reply_message(
+        event.reply_token,
+        TextSendMessage(text=all_users))
+
+    # Echo
     else:
         line_bot_api.reply_message(
             event.reply_token,
