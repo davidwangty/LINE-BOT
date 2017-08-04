@@ -14,6 +14,10 @@ import psycopg2
 # import urlparse
 import currency_search
 from datetime import datetime
+import typz
+
+# timezone set
+tpe = pytz.timezone('Asia/Taipei')
 
 # Database
 # urlparse.uses_netloc.append("postgres")
@@ -59,7 +63,7 @@ def callback():
 def handel_message(event):
     if event.message.text == "日幣":
         yen_info = currency_search.yen()
-        message = "日幣 " + datetime.strftime(datetime.now(), "%m/%d %H:%M")
+        message = "日幣 " + datetime.strftime(datetime.now(tz=tpe), "%m/%d %H:%M")
         message += "\n 現金買入  賣出  即期買入  賣出\n"
         for info in yen_info:
             message += " " + info + "  "
