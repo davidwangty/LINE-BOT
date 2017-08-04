@@ -80,7 +80,7 @@ def handel_message(event):
 
     # 建立使用者資料
     if event.message.text == "建立":
-        user = user(event.source.user_id, event.reply_token)
+        user = User(event.source.user_id, event.reply_token)
         db.session.add(user)
         db.session.commit()
         all_users = User.query.all()
