@@ -20,8 +20,8 @@ import pytz
 tpe = pytz.timezone('Asia/Taipei')
 
 # Database
-urlparse.uses_netloc.append("postgres")
-url = urlparse.urlparse(os.environ["DATABASE_URL"])
+urlparse3.uses_netloc.append("postgres")
+url = urlparse3.urlparse(os.environ["DATABASE_URL"])
 
 conn = psycopg2.connect(
     database=url.path[1:],
