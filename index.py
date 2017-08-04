@@ -11,7 +11,7 @@ from linebot.models import (
 )
 import os
 import psycopg2
-# import urlparse
+import urlparse3
 import currency_search
 from datetime import datetime
 import pytz
@@ -20,16 +20,16 @@ import pytz
 tpe = pytz.timezone('Asia/Taipei')
 
 # Database
-# urlparse.uses_netloc.append("postgres")
-# url = urlparse.urlparse(os.environ["DATABASE_URL"])
+urlparse.uses_netloc.append("postgres")
+url = urlparse.urlparse(os.environ["DATABASE_URL"])
 
-# conn = psycopg2.connect(
-#     database=url.path[1:],
-#     user=url.username,
-#     password=url.password,
-#     host=url.hostname,
-#     port=url.port
-# )
+conn = psycopg2.connect(
+    database=url.path[1:],
+    user=url.username,
+    password=url.password,
+    host=url.hostname,
+    port=url.port
+)
 
 AccessToken = os.environ["ChannelAccessToken"]
 ChannelSecret = os.environ["ChannelSecret"]
