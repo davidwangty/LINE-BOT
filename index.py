@@ -11,7 +11,7 @@ from linebot.models import (
 )
 import os
 import psycopg2
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 import currency_search
 from datetime import datetime
 import pytz
@@ -64,8 +64,10 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handel_message(event):
-    print("userID:", event.source.user_id, event.source.type)
+    print("userID:", event.source.user_id)
     print("reply_token:", event.reply_token)
+
+    # 查詢日幣匯率
     if event.message.text == "日幣":
         yen_info = currency_search.yen()
         message = "日幣 " + datetime.strftime(datetime.now(tz=tpe), "%m/%d %H:%M")
@@ -75,6 +77,15 @@ def handel_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=message))
+
+    # 建立使用者資料
+    if event.message.text == "建立":
+        user = user(event.source.user_id, event.reply_token)
+        db.session.add(user)
+        db.session.commit()
+        all_users = User.query.all()
+        print(all_users)
+
     else:
         line_bot_api.reply_message(
             event.reply_token,
