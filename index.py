@@ -14,7 +14,7 @@ import psycopg2
 # import urlparse
 import currency_search
 from datetime import datetime
-import typz
+import pytz
 
 # timezone set
 tpe = pytz.timezone('Asia/Taipei')
