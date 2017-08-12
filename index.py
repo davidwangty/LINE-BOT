@@ -13,6 +13,7 @@ import os
 import psycopg2
 from flask_sqlalchemy import SQLAlchemy
 import currency_search
+import ck_crawler
 from datetime import datetime
 import pytz
 
@@ -74,6 +75,17 @@ def handel_message(event):
         message += "\n 現金買入  賣出  即期買入  賣出\n"
         for info in yen_info:
             message += " " + info + "  "
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=message))
+
+    # 小說更新
+    elif event.message.text == "小說":
+        novel_update = ck_crawler.get_novel_title()
+        if novel_update == "":
+            message = "目前都沒有小說更新唷!"
+        else:
+            message = novel_update
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=message))
