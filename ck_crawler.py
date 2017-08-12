@@ -22,6 +22,7 @@ def get_novel_title():
 				info.append("")
 
 			# request 取得網站
+			info[0] = info[0].replace("\ufeff", "")
 			url = 'https://ck101.com/thread-' + info[0] + '-' + info[2] + '-1.html'
 			response = requests.get(url, headers=headers)
 			pageSource = response.text.encode(sys.stdin.encoding, "replace").decode(sys.stdin.encoding)
