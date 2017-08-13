@@ -29,6 +29,8 @@ def get_novel_title():
 			if len(info) < 4:
 				info.append("")
 
+			print(info)
+
 			# request 取得網站
 			info[0] = info[0].replace("\ufeff", "")
 			url = 'https://ck101.com/thread-' + info[0] + '-' + info[2] + '-1.html'
@@ -39,7 +41,7 @@ def get_novel_title():
 			# beautifulsoup 處理
 			soup = BeautifulSoup(pageSource, "html.parser")
 			# 先找到目前最新的那篇，再往後查詢是否有後面的章節
-			print(info[1])
+			# print(info[1])
 			if info[3]:
 				articles = soup.find("td",  class_ = "t_f", id = info[3]).find_all_next("td",  class_ = "t_f")
 			else:
@@ -88,11 +90,10 @@ def get_novel_title():
 			info_list.append(info)
 
 	with open("ck_list.txt", "w", encoding = "utf8") as novels:
+		print(info_list)
 		for info in info_list:
 			novels.write(info[0] + " " + info[1] + " " + info[2] + " " + info[3] + "\n")
 
-	if res != "":
-		print(res)
 	return res
 
 if __name__ == '__main__':
