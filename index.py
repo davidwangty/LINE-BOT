@@ -22,10 +22,9 @@ tpe = pytz.timezone('Asia/Taipei')
 AccessToken = os.environ["ChannelAccessToken"]
 ChannelSecret = os.environ["ChannelSecret"]
 ChannelID = os.environ["UserID"]
+cur_list = currency.get_name()
 
 app = Flask(__name__)
-
-cur_list = currency.get_name()
 
 line_bot_api = LineBotApi(AccessToken)
 handler = WebhookHandler(ChannelSecret)
