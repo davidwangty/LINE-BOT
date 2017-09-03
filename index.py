@@ -11,8 +11,7 @@ from linebot.models import (
 )
 import os
 import psycopg2
-from flask_sqlalchemy import SQLAlchemy
-import currency_search
+import currency
 import ck_crawler
 from datetime import datetime
 import pytz
@@ -26,20 +25,7 @@ ChannelID = os.environ["UserID"]
 
 app = Flask(__name__)
 
-# Database
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-db = SQLAlchemy(app)
-
-class User(db.Model):
-    user_id = db.Column(db.Integer, primary_key=True)
-    reply_token = db.Column(db.String(100), unique=True)
-
-    def __init__(self, user_id, reply_token):
-        self.user_id = user_id
-        self.reply_token = reply_token
-
-    def __repr__(self):
-        return '<ID %r>' % self.user_id
+cur_list = currency.get_name()
 
 line_bot_api = LineBotApi(AccessToken)
 handler = WebhookHandler(ChannelSecret)
@@ -67,17 +53,25 @@ def callback():
 def handel_message(event):
     print("userID:", event.source.user_id)
     print("reply_token:", event.reply_token)
+    text = event.message.text
 
-    # 查詢日幣匯率
-    if event.message.text == "日幣":
-        yen_info = currency_search.yen()
-        message = "日幣 " + datetime.strftime(datetime.now(tz=tpe), "%m/%d %H:%M")
-        message += "\n 現金買入  賣出  即期買入  賣出\n"
-        for info in yen_info:
-            message += " " + info + "  "
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=message))
+    # 查詢匯率
+    if text.find("匯率") != -1 or text in cur_list:
+        for cur in cur_list:
+            if text.find(cur) != -1:
+                cur_info = currency.get_currency(cur)
+                message = "{cur}現在的匯率是 {info}".format(cur = cur, info = cur_info)
+                # message += "\n 現金買入  賣出  即期買入  賣出\n"
+                # for info in yen_info:
+                #     message += " " + info + "  "
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    TextSendMessage(text=message))
+                break
+        else:
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="請告訴我要查甚麼的匯率!"))
 
     # 小說更新
     elif event.message.text == "小說":
