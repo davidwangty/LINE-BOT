@@ -18,9 +18,9 @@ import pytz
 # timezone set
 tpe = pytz.timezone('Asia/Taipei')
 
-# AccessToken = os.environ["ChannelAccessToken"]
-# ChannelSecret = os.environ["ChannelSecret"]
-# ChannelID = os.environ["UserID"]
+AccessToken = os.environ["ChannelAccessToken"]
+ChannelSecret = os.environ["ChannelSecret"]
+ChannelID = os.environ["UserID"]
 cur_list = currency.get_name()
 print(cur_list)
 
