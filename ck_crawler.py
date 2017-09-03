@@ -3,13 +3,6 @@ import os
 import sys
 import requests
 from bs4 import BeautifulSoup, element
-from linebot import LineBotApi
-from linebot.models import TextSendMessage
-
-# LINE BOT VAR
-AccessToken = os.environ["ChannelAccessToken"]
-ChannelSecret = os.environ["ChannelSecret"]
-ChannelID = os.environ["UserID"]
 
 # request ck101.com 需要模擬瀏覽器
 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
@@ -96,9 +89,3 @@ def get_novel_title():
 
 	return res
 
-if __name__ == '__main__':
-	line_bot_api = LineBotApi(AccessToken)
-	novel_update = get_novel_title()
-	if novel_update != "":
-		line_bot_api.push_message(ChannelID, 
-	    	TextSendMessage(text=novel_update))

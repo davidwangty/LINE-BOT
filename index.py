@@ -10,7 +10,6 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
 import os
-import psycopg2
 import currency
 import ck_crawler
 from datetime import datetime
@@ -19,10 +18,11 @@ import pytz
 # timezone set
 tpe = pytz.timezone('Asia/Taipei')
 
-AccessToken = os.environ["ChannelAccessToken"]
-ChannelSecret = os.environ["ChannelSecret"]
-ChannelID = os.environ["UserID"]
+# AccessToken = os.environ["ChannelAccessToken"]
+# ChannelSecret = os.environ["ChannelSecret"]
+# ChannelID = os.environ["UserID"]
 cur_list = currency.get_name()
+print(cur_list)
 
 app = Flask(__name__)
 

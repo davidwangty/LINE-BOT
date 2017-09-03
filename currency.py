@@ -11,6 +11,7 @@ def get_name():
 		curs = text.split("(")
 		for cur in curs:
 			cur_list.append(cur[:-1])
+	return cur_list
 
 
 def get_currency(curr):
